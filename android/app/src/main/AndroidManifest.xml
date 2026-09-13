@@ -10,7 +10,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="friends_zone">
         
-        <!-- অ্যান্ড্রয়েড ভি২ এম্বেডিং বাধ্যতামূলক করার মেটা-ডেটা (এটিই অডিও প্লেয়ারের এরর দূর করবে) -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
