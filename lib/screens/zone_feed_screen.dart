@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import '../coin_referral_manager.dart';
 
+// --- সাউন্ড হেল্পার ক্লাস (অটো সাউন্ড বাজানোর জন্য) ---
+class SoundHelper {
+  static final AudioPlayer _audioPlayer = AudioPlayer();
+
+  static Future<void> playActionSound() async {
+    try {
+      // লোকাল অ্যাসেট বা সিস্টেম সাউন্ড প্লে করার চেষ্টা করবে
+      await _audioPlayer.play(AssetSource('sounds/click.mp3'));
+    } catch (e) {
+      debugPrint('Sound play note: File not found or running in web/emulator without asset. ($e)');
+    }
+  }
+}
+
+// --- সোশ্যাল জোন ফিড স্ক্রিন ---
 class ZoneFeedScreen extends StatefulWidget {
   const ZoneFeedScreen({super.key});
 
@@ -9,47 +25,25 @@ class ZoneFeedScreen extends StatefulWidget {
 }
 
 class _ZoneFeedScreenState extends State<ZoneFeedScreen> {
-  final TextEditingController _postController = TextEditingController();
-
-  // ডেমো ফিড পোস্ট লিস্ট
+  // ডেমো পোস্ট ডাটা তালিকা
   final List<Map<String, dynamic>> posts = [
     {
-      'name': 'Biplob Hossain Billal',
-      'time': '10 mins ago',
-      'content': 'Welcome to Friends Zone! Enjoy proximity chatting and offline sharing.',
+      'name': 'Biplob Ahmed',
+      'time': '2 mins ago',
+      'content': 'Enjoying the new proximity social features and live gaming zone! 🚀',
       'likes': 12,
-      'comments': 4,
-      'shares': 5,
-      'isLiked': false,
+      'comments': 5,
+      'shares': 2,
     },
     {
-      'name': 'Nusrat Jahan',
-      'time': '1 hour ago',
-      'content': 'Scanning nearby friends using GPS Radar is super cool! 🚀',
-      'likes': 25,
-      'comments': 8,
-      'shares': 10,
-      'isLiked': true,
+      'name': 'Sarah Khan',
+      'time': '15 mins ago',
+      'content': 'Playing Ludo and Tic Tac Toe inside voice rooms is super fun! 🎲✨',
+      'likes': 28,
+      'comments': 10,
+      'shares': 4,
     },
   ];
-
-  void _addNewPost() {
-    if (_postController.text.trim().isEmpty) return;
-    setState(() {
-      posts.insert(0, {
-        'name': 'Biplob Hossain Billal',
-        'time': 'Just now',
-        'content': _postController.text.trim(),
-        'likes': 0,
-        'comments': 0,
-        'shares': 0,
-        'isLiked': false,
-      });
-      _postController.clear();
-    });
-    // পোস্ট করার জন্য বোনাস কয়েন বা রিওয়ার্ড
-    CoinReferralManager.earnCoins('share', context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,162 +53,132 @@ class _ZoneFeedScreenState extends State<ZoneFeedScreen> {
         backgroundColor: Colors.pink,
         foregroundColor: Colors.white,
         actions: [
+          // লাইভ কয়েন কাউন্টার টপবারে দেখার জন্য
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '🪙 ${CoinReferralManager.userCoins} Coins',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
+              child: Row(
+                children: [
+                  const Icon(Icons.monetization_on, color: Colors.amber, size: 20),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${CoinReferralManager.userCoins}',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                  ),
+                ],
               ),
             ),
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // নতুন পোস্ট লেখার বক্স (Facebook Style)
-          Container(
-            padding: const EdgeInsets.all(12.0),
-            color: Colors.white,
+      body: ListView.builder(
+        itemCount: posts.length,
+        itemBuilder: (context, index) {
+          final post = posts[index];
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            elevation: 3,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextField(
-                  controller: _postController,
-                  decoration: InputDecoration(
-                    hintText: 'What\'s on your mind? Share photos, videos...',
-                    filled: true,
-                    fillColor: Colors.grey.shade100,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                // ইউজারের প্রোফাইল হেডার
+                ListTile(
+                  leading: const CircleAvatar(
+                    backgroundColor: Colors.pink,
+                    child: Icon(Icons.person, color: Colors.white),
                   ),
-                  maxLines: 2,
+                  title: Text(post['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text(post['time'], style: const TextStyle(fontSize: 12)),
+                  trailing: const Icon(Icons.more_vert),
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.image, color: Colors.pink),
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Photo/Video upload feature activated!')),
-                            );
-                          },
-                        ),
-                        const Text('Photo/Video', style: TextStyle(color: Colors.grey, fontSize: 13)),
-                      ],
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                
+                // পোস্টের টেক্সট বা কনটেন্ট
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: Text(
+                    post['content'],
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                ),
+
+                // পোস্টের মিডিয়া প্রিভিউ বক্স
+                Container(
+                  height: 180,
+                  width: double.infinity,
+                  color: Colors.pink.shade50,
+                  child: Center(
+                    child: Icon(Icons.image, size: 60, color: Colors.pink.shade200),
+                  ),
+                ),
+                const Divider(height: 1),
+
+                // --- লাইক, কমেন্ট ও শেয়ার বাটন সেকশন (সাউন্ড ইফেক্ট সহ) ---
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      // ১. লাইক বাটন (+1 Coin)
+                      TextButton.icon(
+                        onPressed: () {
+                          // সাউন্ড বাজবে
+                          SoundHelper.playActionSound();
+                          // কয়েন যোগ হবে
+                          setState(() {
+                            post['likes']++;
+                            CoinReferralManager.userCoins += 1;
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('❤️ Liked! +1 Coin earned'), duration: Duration(milliseconds: 800)),
+                          );
+                        },
+                        icon: const Icon(Icons.favorite, color: Colors.pink),
+                        label: Text('Like (${post['likes']})'),
                       ),
-                      onPressed: _addNewPost,
-                      child: const Text('Post'),
-                    ),
-                  ],
+
+                      // ২. কমেন্ট বাটন (+2 Coins)
+                      TextButton.icon(
+                        onPressed: () {
+                          // সাউন্ড বাজবে
+                          SoundHelper.playActionSound();
+                          // কয়েন যোগ হবে
+                          setState(() {
+                            post['comments']++;
+                            CoinReferralManager.userCoins += 2;
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('💬 Commented! +2 Coins earned'), duration: Duration(milliseconds: 800)),
+                          );
+                        },
+                        icon: const Icon(Icons.comment, color: Colors.blue),
+                        label: Text('Comment (${post['comments']})'),
+                      ),
+
+                      // ৩. শেয়ার বাটন (+5 Coins)
+                      TextButton.icon(
+                        onPressed: () {
+                          // সাউন্ড বাজবে
+                          SoundHelper.playActionSound();
+                          // কয়েন যোগ হবে
+                          setState(() {
+                            post['shares']++;
+                            CoinReferralManager.userCoins += 5;
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('↗️ Shared! +5 Coins earned'), duration: Duration(milliseconds: 800)),
+                          );
+                        },
+                        icon: const Icon(Icons.share, color: Colors.green),
+                        label: Text('Share (${post['shares']})'),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-          const Divider(height: 1, thickness: 1),
-
-          // ফিড পোস্ট লিস্ট
-          Expanded(
-            child: ListView.builder(
-              itemCount: posts.length,
-              itemBuilder: (context, index) {
-                final post = posts[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const CircleAvatar(
-                              backgroundColor: Colors.pinkAccent,
-                              child: Icon(Icons.person, color: Colors.white),
-                            ),
-                            const SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(post['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                                Text(post['time'], style: const TextStyle(color: Colors.grey, fontSize: 11)),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Text(post['content'], style: const TextStyle(fontSize: 15)),
-                        const SizedBox(height: 12),
-                        const Divider(height: 1),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            // Like Button (+1 Coin)
-                            TextButton.icon(
-                              onPressed: () {
-                                setState(() {
-                                  post['isLiked'] = !post['isLiked'];
-                                  if (post['isLiked']) {
-                                    post['likes']++;
-                                    CoinReferralManager.earnCoins('like', context);
-                                  } else {
-                                    post['likes']--;
-                                  }
-                                });
-                              },
-                              icon: Icon(
-                                post['isLiked'] ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
-                                color: post['isLiked'] ? Colors.pink : Colors.grey,
-                              ),
-                              label: Text('${post['likes']} Likes', style: TextStyle(color: post['isLiked'] ? Colors.pink : Colors.grey)),
-                            ),
-                            // Comment Button (+2 Coins)
-                            TextButton.icon(
-                              onPressed: () {
-                                CoinReferralManager.earnCoins('comment', context);
-                              },
-                              icon: const Icon(Icons.comment_outlined, color: Colors.grey),
-                              label: Text('${post['comments']} Comments', style: const TextStyle(color: Colors.grey)),
-                            ),
-                            // Share Button (+5 Coins)
-                            TextButton.icon(
-                              onPressed: () {
-                                CoinReferralManager.earnCoins('share', context);
-                              },
-                              icon: const Icon(Icons.share_outlined, color: Colors.grey),
-                              label: Text('${post['shares']} Shares', style: const TextStyle(color: Colors.grey)),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
