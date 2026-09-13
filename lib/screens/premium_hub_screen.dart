@@ -8,10 +8,172 @@ import 'pk_battle_screen.dart';
 import 'time_capsule_screen.dart';
 import 'mesh_chat_screen.dart';
 import 'ai_twin_screen.dart';
-import 'smart_proximity_radar_screen.dart'; // স্মার্ট রাডার স্ক্রিন ইমপোর্ট করা হলো
+import 'smart_proximity_radar_screen.dart';
+import 'media_editor_post_screen.dart';
 
-class PremiumHubScreen extends StatelessWidget {
+class PremiumHubScreen extends StatefulWidget {
   const PremiumHubScreen({super.key});
+
+  @override
+  State<PremiumHubScreen> createState() => _PremiumHubScreenState();
+}
+
+class _PremiumHubScreenState extends State<PremiumHubScreen> {
+  // আপনার নির্ধারিত প্রিমিয়াম রেট ও ফিচার লিস্ট
+  final Map<String, Map<String, dynamic>> featuresData = {
+    'ai_twin': {
+      'title': 'AI Social Twin',
+      'subtitle': 'Digital Clone Auto-Chat',
+      'icon': Icons.smart_toy,
+      'color': Colors.teal,
+      'cost': 1000,
+      'unlocked': false,
+      'screen': const AiTwinScreen()
+    },
+    'mesh_chat': {
+      'title': 'Mesh Bluetooth Chat',
+      'subtitle': 'Zero Internet P2P Chat',
+      'icon': Icons.bluetooth_connected,
+      'color': Colors.blue,
+      'cost': 750,
+      'unlocked': false,
+      'screen': const MeshChatScreen()
+    },
+    'time_capsules': {
+      'title': 'Time Capsules',
+      'subtitle': 'GPS Secret Memories',
+      'icon': Icons.pin_drop,
+      'color': Colors.green,
+      'cost': 600,
+      'unlocked': false,
+      'screen': const TimeCapsuleScreen()
+    },
+    'smart_radar': {
+      'title': 'Smart Proximity Radar',
+      'subtitle': 'Mood Matching & Radar',
+      'icon': Icons.radar,
+      'color': Colors.pink,
+      'cost': 500,
+      'unlocked': false,
+      'screen': const SmartProximityRadarScreen()
+    },
+    'pk_battle': {
+      'title': 'PK Battle Arena',
+      'subtitle': 'Live Group Battles',
+      'icon': Icons.local_fire_department,
+      'color': Colors.deepOrange,
+      'cost': 400,
+      'unlocked': false,
+      'screen': const PkBattleScreen()
+    },
+    'media_editor': {
+      'title': 'Pro Media Editor',
+      'subtitle': 'AI Filters & Enhancer',
+      'icon': Icons.auto_fix_high,
+      'color': Colors.deepPurple,
+      'cost': 350,
+      'unlocked': false,
+      'screen': const MediaEditorPostScreen()
+    },
+    'vip_store': {
+      'title': 'VIP Store',
+      'subtitle': 'Frames & Badges',
+      'icon': Icons.diamond,
+      'color': Colors.amber,
+      'cost': 300,
+      'unlocked': false,
+      'screen': const VipStoreScreen()
+    },
+    'game_hub': {
+      'title': 'Game Zone Hub',
+      'subtitle': 'Ludo, Tic-Tac-Toe, Spin',
+      'icon': Icons.games,
+      'color': Colors.purple,
+      'cost': 200,
+      'unlocked': false,
+      'screen': const GamesHubScreen()
+    },
+    'voice_changer': {
+      'title': 'Magic Voice',
+      'subtitle': 'Robot, Child, Monster',
+      'icon': Icons.mic,
+      'color': Colors.indigo,
+      'cost': 150,
+      'unlocked': false,
+      'screen': const VoiceChangerScreen()
+    },
+  };
+
+  // ফিচার ট্যাপ করলে কয়েন দিয়ে পারচেজ বা আনলক করার পপআপ ডায়ালগ
+  void _handleFeatureTap(String key, Map<String, dynamic> feature) {
+    bool isUnlocked = feature['unlocked'];
+    int cost = feature['cost'];
+    String title = feature['title'];
+
+    if (isUnlocked) {
+      // যদি আগে থেকেই আনলক করা থাকে, সরাসরি স্ক্রিনে প্রবেশ করবে
+      Navigator.push(context, MaterialPageRoute(builder: (context) => feature['screen']));
+    } else {
+      // পারচেজ ডায়ালগ বক্স
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Row(
+              children: [
+                const Icon(Icons.lock, color: Colors.pink),
+                const SizedBox(width: 8),
+                Text('Unlock $title'),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('This is an exclusive premium feature. Spend $cost 𝗙𝗭 Coins to unlock it permanently.'),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    const Text('Your Balance: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('${CoinReferralManager.userCoins} 𝗙𝗭', style: const TextStyle(color: Colors.pink, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.pink, foregroundColor: Colors.white),
+                onPressed: () {
+                  Navigator.pop(context);
+                  // কয়েন কাটার লজিক চেক
+                  bool success = CoinReferralManager.spendCoins(cost, context);
+                  if (success) {
+                    setState(() {
+                      featuresData[key]!['unlocked'] = true;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('🎉 Successfully unlocked $title!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                    // আনলক হওয়ার সাথে সাথে স্ক্রিন ওপেন হবে
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => feature['screen']));
+                  }
+                },
+                child: const Text('Unlock Now 👑'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +194,7 @@ class PremiumHubScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // ব্যানার হেডার
+          // টপ ব্যানার হেডার
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -47,12 +209,12 @@ class PremiumHubScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Unlock Ultimate Features 👑',
+                  'Unlock Ultimate Features with FZ Coins 👑',
                   style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 6),
                 Text(
-                  'Use your FZ Coins to access exclusive pro tools, games, proximity capsules, and smart radar matching!',
+                  'Spend your earned FZ coins to permanently unlock pro tools, smart radar, and secret capsules!',
                   style: TextStyle(color: Colors.white70, fontSize: 13),
                 ),
               ],
@@ -66,144 +228,78 @@ class PremiumHubScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // ফিচার গ্রিড লিস্ট (স্মার্ট প্রক্সিমিটি রাডার সহ)
-          GridView.count(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
+          // ফিচার গ্রিড লিস্ট
+          GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics,
-            children: [
-              // ১. সব থেকে প্রিমিয়াম ও ইউনিক স্মার্ট প্রক্সিমিটি রাডার
-              _buildFeatureCard(
-                context,
-                'Smart Proximity Radar',
-                'Mood Matching & Radar',
-                Icons.radar,
-                Colors.pink,
-                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartProximityRadarScreen())),
-                isTopFeatured: true,
-              ),
-              _buildFeatureCard(
-                context,
-                'VIP Store',
-                'Frames & Badges',
-                Icons.diamond,
-                Colors.amber,
-                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VipStoreScreen())),
-              ),
-              _buildFeatureCard(
-                context,
-                'Game Zone Hub',
-                'Ludo, Tic-Tac-Toe, Spin',
-                Icons.games,
-                Colors.purple,
-                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const GamesHubScreen())),
-              ),
-              _buildFeatureCard(
-                context,
-                'PK Battle Arena',
-                'Live Group Battles',
-                Icons.local_fire_department,
-                Colors.deepOrange,
-                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PkBattleScreen())),
-              ),
-              _buildFeatureCard(
-                context,
-                'Magic Voice',
-                'Robot, Child, Monster',
-                Icons.mic,
-                Colors.indigo,
-                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VoiceChangerScreen())),
-              ),
-              _buildFeatureCard(
-                context,
-                'Time Capsules',
-                'GPS Secret Memories',
-                Icons.pin_drop,
-                Colors.green,
-                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TimeCapsuleScreen())),
-              ),
-              _buildFeatureCard(
-                context,
-                'Mesh Bluetooth Chat',
-                'Zero Internet P2P Chat',
-                Icons.bluetooth_connected,
-                Colors.blue,
-                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MeshChatScreen())),
-              ),
-              _buildFeatureCard(
-                context,
-                'AI Social Twin',
-                'Digital Clone Auto-Chat',
-                Icons.smart_toy,
-                Colors.teal,
-                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AiTwinScreen())),
-              ),
-            ],
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: featuresData.length,
+            itemBuilder: (context, index) {
+              String key = featuresData.keys.elementAt(index);
+              var feature = featuresData[key]!;
+              bool isUnlocked = feature['unlocked'];
+              Color color = feature['color'];
+
+              return InkWell(
+                onTap: () => _handleFeatureTap(key, feature),
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(isUnlocked ? 0.15 : 0.08),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: color.withOpacity(isUnlocked ? 1.0 : 0.5),
+                      width: isUnlocked ? 2.0 : 1.5,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.between,
+                        children: [
+                          Icon(feature['icon'], size: 32, color: color),
+                          // আনলক স্ট্যাটাস অথবা নির্দিষ্ট কয়েন রেট ব্যাজ
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: isUnlocked ? Colors.green : Colors.amber.shade800,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              isUnlocked ? 'UNLOCKED' : '${feature['cost']} 𝗙𝗭',
+                              style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        feature['title'],
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        feature['subtitle'],
+                        style: const TextStyle(fontSize: 11, color: Colors.grey),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildFeatureCard(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color color,
-    VoidCallback onTap, {
-    bool isTopFeatured = false,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: color.withOpacity(isTopFeatured ? 0.15 : 0.08),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: color.withOpacity(isTopFeatured ? 1.0 : 0.5),
-            width: isTopFeatured ? 2.5 : 1.5,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.between,
-              children: [
-                Icon(icon, size: 36, color: color),
-                if (isTopFeatured)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.pink,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Text('PRO', style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: color),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 2),
-            Text(
-              subtitle,
-              style: const TextStyle(fontSize: 11, color: Colors.grey),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
       ),
     );
   }
