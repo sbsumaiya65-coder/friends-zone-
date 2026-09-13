@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'game_zone/games_hub_screen.dart';
+import 'game_zone/spin_wheel_game.dart';
+import 'tictactoe_screen.dart';
+import 'ludo_game_screen.dart';
 import '../coin_referral_manager.dart';
 
 class GroupRoomScreen extends StatefulWidget {
@@ -13,6 +15,81 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
   bool isMuted = false;
   bool isVideoOn = false;
 
+  // গ্রুপ রুমের ভেতরে গেম হাব পপআপ ওপেন করার ফাংশন
+  void _openGroupGameHub(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          height: 320,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.between,
+                children: [
+                  Text(
+                    '🎮 Group Game Hub',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.pink),
+                  ),
+                  Icon(Icons.games, color: Colors.pink),
+                ],
+              ),
+              const SizedBox(height: 12),
+              const Text('Select a game to play while chatting:', style: TextStyle(color: Colors.grey, fontSize: 13)),
+              const SizedBox(height: 15),
+              Expanded(
+                child: GridView.count(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  children: [
+                    _buildGameIcon(context, 'Tic Tac Toe', Icons.grid_3x3, Colors.pink, const TicTacToeScreen()),
+                    _buildGameIcon(context, 'Ludo Arena', Icons.casino, Colors.purple, const LudoGameScreen()),
+                    _buildGameIcon(context, 'Lucky Spin', Icons.star, Colors.amber, const SpinWheelGameScreen()),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildGameIcon(BuildContext context, String title, IconData icon, Color color, Widget targetScreen) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context); // পপআপ বন্ধ করে গেম স্ক্রিনে নিয়ে যাবে
+        Navigator.push(context, MaterialPageRoute(builder: (context) => targetScreen));
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color, width: 1.5),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 35, color: color),
+            const SizedBox(height: 6),
+            Text(
+              title,
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: color),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +98,6 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
         backgroundColor: Colors.pink,
         foregroundColor: Colors.white,
         actions: [
-          // কয়েন ব্যালেন্স দেখার শর্টকাট
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -87,7 +163,7 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
             ),
           ),
 
-          // গেম জোন এবং প্রিমিয়াম ফিচার শর্টকাট ব্যানার
+          // গেম জোন ওপেন করার শর্টকাট ব্যানার (এক ক্লিকে গেম পপআপ)
           Container(
             padding: const EdgeInsets.all(12),
             color: Colors.pink.shade50,
@@ -97,8 +173,8 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Play Games & Earn Coins!', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-                    Text('Unlock VIP avatar & themes with coins.', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                    Text('Play Games in Group!', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    Text('Click to open all games instantly.', style: TextStyle(fontSize: 11, color: Colors.grey)),
                   ],
                 ),
                 ElevatedButton.icon(
@@ -106,14 +182,9 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
                     backgroundColor: Colors.pink,
                     foregroundColor: Colors.white,
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const GamesHubScreen()),
-                    );
-                  },
+                  onPressed: () => _openGroupGameHub(context),
                   icon: const Icon(Icons.games, size: 18),
-                  label: const Text('Game Hub'),
+                  label: const Text('Open Games'),
                 ),
               ],
             ),
@@ -131,9 +202,6 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
                     setState(() {
                       isMuted = !isMuted;
                     });
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(isMuted ? 'Mic Muted' : 'Mic Unmuted')),
-                    );
                   },
                   icon: Icon(isMuted ? Icons.mic_off : Icons.mic, color: Colors.white),
                   style: IconButton.styleFrom(backgroundColor: isMuted ? Colors.red : Colors.grey.shade800),
@@ -143,9 +211,6 @@ class _GroupRoomScreenState extends State<GroupRoomScreen> {
                     setState(() {
                       isVideoOn = !isVideoOn;
                     });
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(isVideoOn ? 'Video Turned On' : 'Video Turned Off')),
-                    );
                   },
                   icon: Icon(isVideoOn ? Icons.videocam : Icons.videocam_off, color: Colors.white),
                   style: IconButton.styleFrom(backgroundColor: isVideoOn ? Colors.pink : Colors.grey.shade800),
