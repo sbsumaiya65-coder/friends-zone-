@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'screens/auth_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/discover_screen.dart';
+import 'screens/chats_screen.dart';
+import 'screens/profile_screen.dart';
+import 'screens/main_navigation.dart';
+import 'screens/group_room_screen.dart';
+import 'screens/games_screen.dart';
+import 'screens/tictactoe_screen.dart';
+import 'screens/zone_feed_screen.dart';
+import 'coin_referral_manager.dart';
 
 void main() {
-  // যেহেতু আমরা ফায়ারবেস কনফিগারেশন ছাড়াই অ্যাপ রান করতে চাচ্ছি, 
-  // তাই Firebase.initializeApp(); লাইনটি এখানে দিচ্ছি না।
   runApp(const FriendsZoneApp());
 }
 
@@ -12,49 +21,25 @@ class FriendsZoneApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Friends Zone',
       debugShowCheckedModeBanner: false,
+      title: 'Friends Zone',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.pink,
         useMaterial3: true,
       ),
-      // সরাসরি আপনার অ্যাপের মূল হোম পেজ বা ড্যাশবোর্ড স্ক্রিনটি সেট করে দিন
-      home: const MainDashboardScreen(),
-    );
-  }
-}
-
-// এটি আপনার মূল ফিচার বা হোম স্ক্রিনের ডেমো উইজেট
-class MainDashboardScreen extends StatelessWidget {
-  const MainDashboardScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Friends Zone (Testing)'),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'স্বাগতম! আপনার অ্যাপ সফলভাবে ওপেন হয়েছে।',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // এখানে আপনার অ্যাপের মূল ফিচারগুলো টেস্ট করতে পারেন
-                print('Main Feature Clicked');
-              },
-              child: const Text('মেইন ফিচার চেক করুন'),
-            ),
-          ],
-        ),
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MainNavigation(),
+        '/auth': (context) => const AuthScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/discover': (context) => const DiscoverScreen(),
+        '/chats': (context) => const ChatsScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/group_room': (context) => const GroupRoomScreen(),
+        '/games': (context) => const GamesScreen(),
+        '/tictactoe': (context) => const TicTacToeScreen(),
+        '/zone_feed': (context) => const ZoneFeedScreen(),
+      },
     );
   }
 }
