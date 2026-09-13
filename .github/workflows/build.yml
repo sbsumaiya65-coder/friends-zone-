@@ -15,8 +15,9 @@ jobs:
         with:
           flutter-version: '3.19.x'
           channel: 'stable'
-      - run: rm -f pubspec.lock
+      - run: rm -rf pubspec.lock .dart_tool/ build/
       - run: flutter clean
+      - run: flutter pub cache clean -f
       - run: flutter pub get
       - run: flutter build apk --debug
       - uses: actions/upload-artifact@v4
