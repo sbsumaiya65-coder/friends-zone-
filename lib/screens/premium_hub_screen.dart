@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../coin_referral_manager.dart';
 import '../widgets/fz_coin_badge.dart';
+import '../managers/sound_effect_manager.dart'; // সাউন্ড ম্যানেজার ইমপোর্ট করা হলো
 import 'vip_store_screen.dart';
 import 'game_zone/games_hub_screen.dart';
 import 'voice_changer_screen.dart';
@@ -153,12 +154,15 @@ class _PremiumHubScreenState extends State<PremiumHubScreen> {
                   // কয়েন কাটার লজিক চেক
                   bool success = CoinReferralManager.spendCoins(cost, context);
                   if (success) {
+                    // 🎵 পারচেজ সফল হলে স্পেশাল সাউন্ড বাজবে
+                    SoundEffectManager.playPurchaseSound();
+
                     setState(() {
                       featuresData[key]!['unlocked'] = true;
                     });
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('🎉 Successfully unlocked $title!'),
+                        content: Text('🎉 Successfully unlocked $title with VIP Sound!'),
                         backgroundColor: Colors.green,
                       ),
                     );
