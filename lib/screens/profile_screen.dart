@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../coin_referral_manager.dart';
+import '../widgets/fz_coin_badge.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -9,143 +10,114 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // প্রিমিয়াম শপ আইটেম লিস্ট
-  final List<Map<String, dynamic>> premiumItems = [
-    {'name': 'Entry Animation FX', 'cost': 50, 'icon': Icons.flash_on, 'type': 'animation'},
-    {'name': 'VIP Glowing Avatar', 'cost': 100, 'icon': Icons.verified, 'type': 'avatar'},
-    {'name': 'Chamet Style Stickers', 'cost': 30, 'icon': Icons.sticky_note_2, 'type': 'sticker'},
-    {'name': 'Dark Premium Theme', 'cost': 80, 'icon': Icons.palette, 'type': 'theme'},
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Profile & Premium Store'),
+        title: const Text('👤 My FZ Profile & Wallet'),
         backgroundColor: Colors.pink,
         foregroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // প্রফাইল হেডার সেকশন
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.pink.shade700, Colors.pink.shade300],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+      ],
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          // প্রফাইল কার্ড
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.pink.shade400, Colors.purple.shade500],
               ),
-              child: Column(
-                children: [
-                  const CircleAvatar(
-                    radius: 45,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, size: 50, color: Colors.pink),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Biplob Hossain Billal',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                  const Text(
-                    'Ishwardi, Pabna (Proximity Active)',
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
-                  ),
-                  const SizedBox(height: 15),
-                  // কয়েন ব্যালেন্স কার্ড
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.monetization_on, color: Colors.amber),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Balance: ${CoinReferralManager.userCoins} Coins',
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              borderRadius: BorderRadius.circular(20),
             ),
-            
-            const Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Unlock Premium Features with Coins:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            child: Column(
+              children: [
+                const CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, size: 50, color: Colors.pink),
                 ),
-              ),
-            ),
-
-            // প্রিমিয়াম শপ লিস্ট
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: premiumItems.length,
-              itemBuilder: (context, index) {
-                final item = premiumItems[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  elevation: 2,
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.pink.shade50,
-                      child: Icon(item['icon'], color: Colors.pink),
-                    ),
-                    title: Text(item['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('Cost: ${item['cost']} Coins'),
-                    trailing: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink,
-                        foregroundColor: Colors.white,
+                const SizedBox(height: 12),
+                const Text(
+                  'Biplob Hossain Billal',
+                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Ishwardi, Pabna • VIP Creator',
+                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                ),
+                const SizedBox(height: 16),
+                // কয়েন ব্যালেন্স শো করার উইজেট
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.monetization_on, color: Colors.amber),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Balance: ${CoinReferralManager.userCoins} 𝗙𝗭',
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                      onPressed: () {
-                        bool success = CoinReferralManager.spendCoins(item['cost'], context);
-                        if (success) {
-                          setState(() {}); // কয়েন আপডেট রিফ্রেশ করার জন্য
-                        }
-                      },
-                      child: const Text('Unlock'),
-                    ),
+                    ],
                   ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // ফ্রি কয়েন অর্জনের অপশন
+          const Text(
+            'Earn Free FZ Coins:',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          ListTile(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            tileColor: Colors.pink.shade50,
+            leading: const Icon(Icons.card_giftcard, color: Colors.pink),
+            title: const Text('Daily Check-in Bonus', style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: const Text('Claim +20 FZ Coins daily'),
+            trailing: ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink, foregroundColor: Colors.white),
+              onPressed: () {
+                setState(() {
+                  CoinReferralManager.userCoins += 20;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('🎉 Claimed +20 FZ Coins successfully!')),
                 );
               },
+              child: const Text('Claim'),
             ),
-
-            const SizedBox(height: 20),
-            // রেফার অ্যান্ড আর্ন অপশন
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber.shade700,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 45),
-                ),
-                onPressed: () {
-                  CoinReferralManager.earnCoins('refer', context);
-                  setState(() {});
-                },
-                icon: const Icon(Icons.card_giftcard),
-                label: const Text('Invite Friends & Earn +50 Coins'),
-              ),
+          ),
+          const SizedBox(height: 12),
+          ListTile(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            tileColor: Colors.purple.shade50,
+            leading: const Icon(Icons.share, color: Colors.purple),
+            title: const Text('Refer Friends', style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: const Text('Earn +50 FZ Coins per invite'),
+            trailing: ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.purple, foregroundColor: Colors.white),
+              onPressed: () {
+                setState(() {
+                  CoinReferralManager.userCoins += 50;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('🚀 Referral bonus +50 FZ Coins added!')),
+                );
+              },
+              child: const Text('Invite'),
             ),
-            const SizedBox(height: 30),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
