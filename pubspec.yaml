@@ -10,19 +10,14 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # লোকাল সেট ও ক্যাশ সেভ করার জন্য
   shared_preferences: ^2.2.2
-
-  # আইকন ও ইউজার ইন্টারফেসের জন্য
   cupertino_icons: ^1.0.6
-
-  # ছবি বা ফাইল সিলেক্ট করার জন্য
   image_picker: ^1.0.7
-
-  # ভয়েস লাউঞ্জ বা অডিও ফিচারের জন্য
+  
+  # অ্যান্ড্রয়েড ভি২ এম্বেডিং সাপোর্ট করা audioplayers ভার্সন
   audioplayers: ^6.0.0
 
-  # ফায়ারবেসের ভার্সনসমূহ
+  # ফায়ারবেসের সামঞ্জস্যপূর্ণ ভার্সনসমূহ
   firebase_core: ^2.27.0
   firebase_auth: ^4.17.8
   cloud_firestore: ^4.15.8
@@ -35,6 +30,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # অ্যাপের লোগো বা অ্যাসেট ইমেজ রেজিস্ট্রি করার স্থান
   assets:
     - assets/images/friendszone.jpg
