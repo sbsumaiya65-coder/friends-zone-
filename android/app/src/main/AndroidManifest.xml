@@ -1,35 +1,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- ইন্টারনেট পারমিশন -->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
+        android:label="friends_zone"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:label="friends_zone">
+        android:icon="@mipmap/ic_launcher">
         
-        <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
             
+            <!-- ফ্লাটার লঞ্চ থিম মেটা-ডেটা -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+              
+            <!-- হোম স্ক্রিনে অ্যাপের আইকন দেখানোর জন্য এটি বাধ্যতামূলক -->
             <intent-filter>
-                <action android:name="intent.action.MAIN"/>
-                <category android:name="intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        
+        <!-- ফ্লাটার এমবেডিং মেটা-ডেটা -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
     </application>
 </manifest>
