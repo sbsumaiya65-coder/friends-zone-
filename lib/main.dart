@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'screens/auth_screen.dart';
-import 'screens/main_navigation.dart';
+import 'screens/main_app_screen.dart'; // নতুন গোছানো মেইন নেভিগেশন শেল
 import 'screens/tictactoe_screen.dart';
+import 'screens/premium_hub_screen.dart'; // প্রিমিয়াম হাব স্ক্রিন
 
 void main() {
   runApp(const FriendsZoneApp());
@@ -13,7 +14,7 @@ class FriendsZoneApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Friends Zone',
+      title: 'Friends Zone - FZ',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.pink,
@@ -26,7 +27,8 @@ class FriendsZoneApp extends StatelessWidget {
       initialRoute: '/auth',
       routes: {
         '/auth': (context) => const AuthScreen(),
-        '/': (context) => const MainNavigation(),
+        '/': (context) => const MainAppScreen(), // মেইন নেভিগেশন (হোম, রাডার, প্রিমিয়াম হাব, প্রফাইল)
+        '/premium_hub': (context) => const PremiumHubScreen(),
         '/tictactoe': (context) => const TicTacToeScreen(),
       },
     );
