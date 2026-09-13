@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../coin_referral_manager.dart';
+import '../widgets/fz_coin_badge.dart'; // FZ কয়েন উইজেট ইমপোর্ট করা হলো
 
-// --- সাউন্ড হেল্পার ক্লাস (অটো সাউন্ড বাজানোর জন্য) ---
+// --- সাউন্ড হেল্পার ক্লাস ---
 class SoundHelper {
   static final AudioPlayer _audioPlayer = AudioPlayer();
 
   static Future<void> playActionSound() async {
     try {
-      // লোকাল অ্যাসেট বা সিস্টেম সাউন্ড প্লে করার চেষ্টা করবে
       await _audioPlayer.play(AssetSource('sounds/click.mp3'));
     } catch (e) {
-      debugPrint('Sound play note: File not found or running in web/emulator without asset. ($e)');
+      debugPrint('Sound play note: $e');
     }
   }
 }
@@ -25,12 +25,11 @@ class ZoneFeedScreen extends StatefulWidget {
 }
 
 class _ZoneFeedScreenState extends State<ZoneFeedScreen> {
-  // ডেমো পোস্ট ডাটা তালিকা
   final List<Map<String, dynamic>> posts = [
     {
       'name': 'Biplob Ahmed',
       'time': '2 mins ago',
-      'content': 'Enjoying the new proximity social features and live gaming zone! 🚀',
+      'content': 'Enjoying the new proximity social features and live gaming zone with FZ Coins! 🚀',
       'likes': 12,
       'comments': 5,
       'shares': 2,
@@ -53,20 +52,11 @@ class _ZoneFeedScreenState extends State<ZoneFeedScreen> {
         backgroundColor: Colors.pink,
         foregroundColor: Colors.white,
         actions: [
-          // লাইভ কয়েন কাউন্টার টপবারে দেখার জন্য
+          // টপবারে FZ কয়েন কাউন্টার ব্যাজ
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.monetization_on, color: Colors.amber, size: 20),
-                  const SizedBox(width: 4),
-                  Text(
-                    '${CoinReferralManager.userCoins}',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-                  ),
-                ],
-              ),
+              child: FZCoinBadge(coinAmount: CoinReferralManager.userCoins),
             ),
           ),
         ],
@@ -82,7 +72,6 @@ class _ZoneFeedScreenState extends State<ZoneFeedScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ইউজারের প্রোফাইল হেডার
                 ListTile(
                   leading: const CircleAvatar(
                     backgroundColor: Colors.pink,
@@ -92,8 +81,6 @@ class _ZoneFeedScreenState extends State<ZoneFeedScreen> {
                   subtitle: Text(post['time'], style: const TextStyle(fontSize: 12)),
                   trailing: const Icon(Icons.more_vert),
                 ),
-                
-                // পোস্টের টেক্সট বা কনটেন্ট
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: Text(
@@ -101,8 +88,6 @@ class _ZoneFeedScreenState extends State<ZoneFeedScreen> {
                     style: const TextStyle(fontSize: 15),
                   ),
                 ),
-
-                // পোস্টের মিডিয়া প্রিভিউ বক্স
                 Container(
                   height: 180,
                   width: double.infinity,
@@ -112,61 +97,48 @@ class _ZoneFeedScreenState extends State<ZoneFeedScreen> {
                   ),
                 ),
                 const Divider(height: 1),
-
-                // --- লাইক, কমেন্ট ও শেয়ার বাটন সেকশন (সাউন্ড ইফেক্ট সহ) ---
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      // ১. লাইক বাটন (+1 Coin)
                       TextButton.icon(
                         onPressed: () {
-                          // সাউন্ড বাজবে
                           SoundHelper.playActionSound();
-                          // কয়েন যোগ হবে
                           setState(() {
                             post['likes']++;
                             CoinReferralManager.userCoins += 1;
                           });
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('❤️ Liked! +1 Coin earned'), duration: Duration(milliseconds: 800)),
+                            const SnackBar(content: Text('❤️ Liked! +1 FZ Coin earned'), duration: Duration(milliseconds: 800)),
                           );
                         },
                         icon: const Icon(Icons.favorite, color: Colors.pink),
                         label: Text('Like (${post['likes']})'),
                       ),
-
-                      // ২. কমেন্ট বাটন (+2 Coins)
                       TextButton.icon(
                         onPressed: () {
-                          // সাউন্ড বাজবে
                           SoundHelper.playActionSound();
-                          // কয়েন যোগ হবে
                           setState(() {
                             post['comments']++;
                             CoinReferralManager.userCoins += 2;
                           });
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('💬 Commented! +2 Coins earned'), duration: Duration(milliseconds: 800)),
+                            const SnackBar(content: Text('💬 Commented! +2 FZ Coins earned'), duration: Duration(milliseconds: 800)),
                           );
                         },
                         icon: const Icon(Icons.comment, color: Colors.blue),
                         label: Text('Comment (${post['comments']})'),
                       ),
-
-                      // ৩. শেয়ার বাটন (+5 Coins)
                       TextButton.icon(
                         onPressed: () {
-                          // সাউন্ড বাজবে
                           SoundHelper.playActionSound();
-                          // কয়েন যোগ হবে
                           setState(() {
                             post['shares']++;
                             CoinReferralManager.userCoins += 5;
                           });
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('↗️ Shared! +5 Coins earned'), duration: Duration(milliseconds: 800)),
+                            const SnackBar(content: Text('↗️ Shared! +5 FZ Coins earned'), duration: Duration(milliseconds: 800)),
                           );
                         },
                         icon: const Icon(Icons.share, color: Colors.green),
