@@ -6,26 +6,36 @@ class GroupRoomScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Voice & Video Rooms')),
+      appBar: AppBar(
+        title: const Text('Live Voice & Video Rooms'),
+        backgroundColor: Colors.pink,
+        foregroundColor: Colors.white,
+      ),
       body: ListView.builder(
-        itemCount: 3,
-        padding: const EdgeInsets.all(12.0),
+        itemCount: 4,
+        padding: const EdgeInsets.all(12),
         itemBuilder: (context, index) {
           return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            elevation: 3,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: ListTile(
               leading: const CircleAvatar(
-                backgroundColor: Colors.pink,
+                backgroundColor: Colors.purple,
                 child: Icon(Icons.mic, color: Colors.white),
               ),
-              title: Text('Friends Chill Room #${index + 1}'),
-              subtitle: const Text('Host: Biplob • 5 speakers active'),
+              title: Text('Friends Chill & Talk Room #${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: const Text('Host: Biplob Hossain • 6 Speakers Active'),
               trailing: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.pink,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Joined live audio room successfully!')),
+                  );
+                },
                 child: const Text('Join'),
               ),
             ),
