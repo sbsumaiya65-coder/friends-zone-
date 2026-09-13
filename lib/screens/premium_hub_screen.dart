@@ -8,6 +8,7 @@ import 'pk_battle_screen.dart';
 import 'time_capsule_screen.dart';
 import 'mesh_chat_screen.dart';
 import 'ai_twin_screen.dart';
+import 'smart_proximity_radar_screen.dart'; // স্মার্ট রাডার স্ক্রিন ইমপোর্ট করা হলো
 
 class PremiumHubScreen extends StatelessWidget {
   const PremiumHubScreen({super.key});
@@ -51,7 +52,7 @@ class PremiumHubScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 6),
                 Text(
-                  'Use your FZ Coins to access exclusive pro tools, games, proximity capsules, and AI twins!',
+                  'Use your FZ Coins to access exclusive pro tools, games, proximity capsules, and smart radar matching!',
                   style: TextStyle(color: Colors.white70, fontSize: 13),
                 ),
               ],
@@ -60,12 +61,12 @@ class PremiumHubScreen extends StatelessWidget {
           const SizedBox(height: 20),
 
           const Text(
-            'All Premium Modules:',
+            'All Premium & Unique Modules:',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
           ),
           const SizedBox(height: 12),
 
-        // ফিচার গ্রিড লিস্ট
+          // ফিচার গ্রিড লিস্ট (স্মার্ট প্রক্সিমিটি রাডার সহ)
           GridView.count(
             crossAxisCount: 2,
             crossAxisSpacing: 12,
@@ -73,6 +74,16 @@ class PremiumHubScreen extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics,
             children: [
+              // ১. সব থেকে প্রিমিয়াম ও ইউনিক স্মার্ট প্রক্সিমিটি রাডার
+              _buildFeatureCard(
+                context,
+                'Smart Proximity Radar',
+                'Mood Matching & Radar',
+                Icons.radar,
+                Colors.pink,
+                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SmartProximityRadarScreen())),
+                isTopFeatured: true,
+              ),
               _buildFeatureCard(
                 context,
                 'VIP Store',
@@ -86,7 +97,7 @@ class PremiumHubScreen extends StatelessWidget {
                 'Game Zone Hub',
                 'Ludo, Tic-Tac-Toe, Spin',
                 Icons.games,
-                Colors.pink,
+                Colors.purple,
                 () => Navigator.push(context, MaterialPageRoute(builder: (context) => const GamesHubScreen())),
               ),
               _buildFeatureCard(
@@ -102,7 +113,7 @@ class PremiumHubScreen extends StatelessWidget {
                 'Magic Voice',
                 'Robot, Child, Monster',
                 Icons.mic,
-                Colors.purple,
+                Colors.indigo,
                 () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VoiceChangerScreen())),
               ),
               _buildFeatureCard(
@@ -126,7 +137,7 @@ class PremiumHubScreen extends StatelessWidget {
                 'AI Social Twin',
                 'Digital Clone Auto-Chat',
                 Icons.smart_toy,
-                Colors.indigo,
+                Colors.teal,
                 () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AiTwinScreen())),
               ),
             ],
@@ -142,23 +153,41 @@ class PremiumHubScreen extends StatelessWidget {
     String subtitle,
     IconData icon,
     Color color,
-    VoidCallback onTap,
-  ) {
+    VoidCallback onTap, {
+    bool isTopFeatured = false,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
+          color: color.withOpacity(isTopFeatured ? 0.15 : 0.08),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.5), width: 1.5),
+          border: Border.all(
+            color: color.withOpacity(isTopFeatured ? 1.0 : 0.5),
+            width: isTopFeatured ? 2.5 : 1.5,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 36, color: color),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.between,
+              children: [
+                Icon(icon, size: 36, color: color),
+                if (isTopFeatured)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.pink,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Text('PRO', style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                  ),
+              ],
+            ),
             const SizedBox(height: 10),
             Text(
               title,
