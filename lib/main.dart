@@ -1,4 +1,4 @@
-Import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'screens/auth_screen.dart';
 import 'screens/main_navigation.dart';
 import 'screens/tictactoe_screen.dart';
