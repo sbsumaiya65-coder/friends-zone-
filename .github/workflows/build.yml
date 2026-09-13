@@ -2,20 +2,16 @@ name: Build Flutter APK
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+    branches: [ "main", "master" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -23,24 +19,15 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ''
+          flutter-version: 'any'
           channel: 'stable'
           cache: true
 
-      - name: Clean up old cache and lock files to avoid conflicts
-        run: |
-          rm -rf pubspec.lock .dart_tool/ build/ android/.gradle/
-          flutter clean
-          flutter pub cache clean -f
+      - name: Build APK Split by ABI
+        run: flutter build apk --release --split-per-abi
 
-      - name: Install Dependencies
-        run: flutter pub get
-
-      - name: Build Debug APK
-        run: flutter build apk --debug
-
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload APK Artifacts
+        uses: actions/upload-artifact@v3
         with:
-          name: app-debug
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          name: release-apks
+          path: build/app/outputs/flutter-apk/*.apk
