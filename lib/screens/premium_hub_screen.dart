@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../coin_referral_manager.dart';
 import '../widgets/fz_coin_badge.dart';
-import '../managers/sound_effect_manager.dart'; // সাউন্ড ম্যানেজার ইমপোর্ট করা হলো
+import '../managers/sound_effect_manager.dart';
 import 'vip_store_screen.dart';
 import 'game_zone/games_hub_screen.dart';
 import 'voice_changer_screen.dart';
@@ -9,7 +9,6 @@ import 'pk_battle_screen.dart';
 import 'time_capsule_screen.dart';
 import 'mesh_chat_screen.dart';
 import 'ai_twin_screen.dart';
-import 'smart_proximity_radar_screen.dart';
 import 'media_editor_post_screen.dart';
 
 class PremiumHubScreen extends StatefulWidget {
@@ -20,7 +19,6 @@ class PremiumHubScreen extends StatefulWidget {
 }
 
 class _PremiumHubScreenState extends State<PremiumHubScreen> {
-  // আপনার নির্ধারিত প্রিমিয়াম রেট ও ফিচার লিস্ট
   final Map<String, Map<String, dynamic>> featuresData = {
     'ai_twin': {
       'title': 'AI Social Twin',
@@ -48,15 +46,6 @@ class _PremiumHubScreenState extends State<PremiumHubScreen> {
       'cost': 600,
       'unlocked': false,
       'screen': const TimeCapsuleScreen()
-    },
-    'smart_radar': {
-      'title': 'Smart Proximity Radar',
-      'subtitle': 'Mood Matching & Radar',
-      'icon': Icons.radar,
-      'color': Colors.pink,
-      'cost': 500,
-      'unlocked': false,
-      'screen': const SmartProximityRadarScreen()
     },
     'pk_battle': {
       'title': 'PK Battle Arena',
@@ -105,17 +94,14 @@ class _PremiumHubScreenState extends State<PremiumHubScreen> {
     },
   };
 
-  // ফিচার ট্যাপ করলে কয়েন দিয়ে পারচেজ বা আনলক করার পপআপ ডায়ালগ
   void _handleFeatureTap(String key, Map<String, dynamic> feature) {
     bool isUnlocked = feature['unlocked'];
     int cost = feature['cost'];
     String title = feature['title'];
 
     if (isUnlocked) {
-      // যদি আগে থেকেই আনলক করা থাকে, সরাসরি স্ক্রিনে প্রবেশ করবে
       Navigator.push(context, MaterialPageRoute(builder: (context) => feature['screen']));
     } else {
-      // পারচেজ ডায়ালগ বক্স
       showDialog(
         context: context,
         builder: (context) {
@@ -151,12 +137,9 @@ class _PremiumHubScreenState extends State<PremiumHubScreen> {
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.pink, foregroundColor: Colors.white),
                 onPressed: () {
                   Navigator.pop(context);
-                  // কয়েন কাটার লজিক চেক
                   bool success = CoinReferralManager.spendCoins(cost, context);
                   if (success) {
-                    // 🎵 পারচেজ সফল হলে স্পেশাল সাউন্ড বাজবে
                     SoundEffectManager.playPurchaseSound();
-
                     setState(() {
                       featuresData[key]!['unlocked'] = true;
                     });
@@ -166,7 +149,6 @@ class _PremiumHubScreenState extends State<PremiumHubScreen> {
                         backgroundColor: Colors.green,
                       ),
                     );
-                    // আনলক হওয়ার সাথে সাথে স্ক্রিন ওপেন হবে
                     Navigator.push(context, MaterialPageRoute(builder: (context) => feature['screen']));
                   }
                 },
@@ -198,7 +180,6 @@ class _PremiumHubScreenState extends State<PremiumHubScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // টপ ব্যানার হেডার
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -218,21 +199,18 @@ class _PremiumHubScreenState extends State<PremiumHubScreen> {
                 ),
                 SizedBox(height: 6),
                 Text(
-                  'Spend your earned FZ coins to permanently unlock pro tools, smart radar, and secret capsules!',
+                  'Spend your earned FZ coins to permanently unlock pro tools and secret features!',
                   style: TextStyle(color: Colors.white70, fontSize: 13),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 20),
-
           const Text(
             'All Premium & Unique Modules:',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
           ),
           const SizedBox(height: 12),
-
-          // ফিচার গ্রিড লিস্ট
           GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -266,10 +244,9 @@ class _PremiumHubScreenState extends State<PremiumHubScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.between,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // ঠিক করা হলো
                         children: [
                           Icon(feature['icon'], size: 32, color: color),
-                          // আনলক স্ট্যাটাস অথবা নির্দিষ্ট কয়েন রেট ব্যাজ
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
