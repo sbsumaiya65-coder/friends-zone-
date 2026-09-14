@@ -6,112 +6,202 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // কালো হয়ে যাওয়া স্ক্রিন সমস্যার সমাধান
+      backgroundColor: const Color(0xFF0F0B15),
       body: ListView(
+        physics: const BouncingScrollPhysics(),
         children: [
-          // কাভার ফটো ও প্রোফাইল হেডার
+          // Cover & Profile Header Stack
           Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.center,
             children: [
               Container(
-                height: 150,
+                height: 160,
+                width: double.infinity,
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: [Colors.purple, Colors.pink]),
+                  gradient: LinearGradient(
+                    colors: [Colors.purple, Colors.pink, Colors.deepOrange],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.settings, color: Colors.white),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Positioned(
                 bottom: -40,
-                left: 20,
-                child: CircleAvatar(
-                  radius: 45,
-                  backgroundColor: Colors.white,
-                  child: CircleAvatar(
-                    radius: 42,
-                    backgroundColor: Colors.pink[100],
-                    child: const Icon(Icons.person, size: 50, color: Colors.white),
+                child: Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(colors: [Colors.pink, Colors.yellow]),
+                  ),
+                  child: const CircleAvatar(
+                    radius: 45,
+                    backgroundColor: Colors.black,
+                    child: Icon(Icons.person, size: 50, color: Colors.white),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 50),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          const SizedBox(height: 45),
+
+          // Name & Handle
+          Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text(
+                  'Biplob Hossain',
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(width: 4),
+                Icon(Icons.verified, color: Colors.pinkAccent, size: 18),
+              ],
+            ),
+          ),
+          const Center(
+            child: Text(
+              '@biplob.hossain',
+              style: TextStyle(color: Colors.grey, fontSize: 13),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Stats Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              _StatItem(count: '258', label: 'Followers'),
+              _StatItem(count: '198', label: 'Following'),
+              _StatItem(count: '3.4K', label: 'Friends'),
+            ],
+          ),
+          const SizedBox(height: 15),
+
+          // Bio Box
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1A1325),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.white10),
+            ),
+            child: const Text(
+              'Life is better when you have good friends. Let\'s connect, share and grow together in Friends Zone. 💖',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white70, fontSize: 12),
+            ),
+          ),
+          const SizedBox(height: 15),
+
+          // FZ Premium Banner Card
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.pink.shade800, Colors.purple.shade900],
+              ),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(color: Colors.pink.withOpacity(0.3), blurRadius: 8, spreadRadius: 2)
+              ],
+            ),
+            child: Row(
               children: [
-                const Text(
-                  'BIPLOB HOSSAIN BILLAL',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const Text(
-                  '@biplob.hossain.billal',
-                  style: TextStyle(color: Colors.grey, fontSize: 14),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: const [
-                    Text('308 followers', style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(width: 15),
-                    Text('318 following', style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(width: 15),
-                    Text('247 friends', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Friends Zone-এর সাথে যুক্ত থাকুন! নতুন মুহূর্ত, ছবি ও ভিডিও শেয়ার করুন এবং বন্ধুদের সাথে চ্যাট করুন। 💛✨',
-                  style: TextStyle(fontSize: 13),
-                ),
-                const SizedBox(height: 15),
-                
-                // টেক্সট ভেঙে যাওয়া (Layout Overflow) রোধ করার জন্য Expanded ব্যবহার করা হয়েছে
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
-                        onPressed: () {},
-                        child: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
+                const Icon(Icons.star, color: Colors.amber, size: 30),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'FZ Premium',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      flex: 1,
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        child: const Text('Post', style: TextStyle(fontSize: 12)),
+                      Text(
+                        'Unlock exclusive features & VIP perks',
+                        style: TextStyle(color: Colors.white70, fontSize: 11),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      flex: 1,
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        child: const Text('Promote', style: TextStyle(fontSize: 11)),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 20),
-                const Divider(),
-                // ট্যাব অপশন (Posts, Reels, Stories)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
-                    Tab(child: Text('Posts', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink))),
-                    Tab(child: Text('Reels / Feels', style: TextStyle(color: Colors.grey))),
-                    Tab(child: Text('Stories', style: TextStyle(color: Colors.grey))),
-                  ],
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.pink,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  ),
+                  onPressed: () {},
+                  child: const Text('Go Pro', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                const Divider(),
+              ],
+            ),
+          ),
+          const SizedBox(height: 15),
+
+          // Location Details
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1A1325),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: const [
+                ListTile(
+                  dense: true,
+                  leading: Icon(Icons.location_on, color: Colors.pinkAccent),
+                  title: Text('Rajshahi Division', style: TextStyle(color: Colors.white)),
+                ),
+                ListTile(
+                  dense: true,
+                  leading: Icon(Icons.home, color: Colors.pinkAccent),
+                  title: Text('Ishwardi Upazila, Pabna', style: TextStyle(color: Colors.white)),
+                ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _StatItem extends StatelessWidget {
+  final String count;
+  final String label;
+
+  const _StatItem({required this.count, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          count,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        Text(
+          label,
+          style: const TextStyle(color: Colors.grey, fontSize: 12),
+        ),
+      ],
     );
   }
 }
