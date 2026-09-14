@@ -14,12 +14,12 @@ class MainAppScreen extends StatefulWidget {
 class _MainAppScreenState extends State<MainAppScreen> {
   int _currentIndex = 0;
 
-  // এখানে চ্যাট স্ক্রিনসহ মোট স্ক্রিনগুলোর তালিকা তৈরি করা হলো
+  // স্ক্রিনগুলোর তালিকা
   final List<Widget> _screens = [
     const ZoneFeedScreen(),         // ট্যাব ০: হোম
     const Center(child: Text('FZ Feels & Reels Feed', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))), // ট্যাব ১: Feels
-    const SizedBox.shrink(),        // ট্যাব ২: মাঝের প্লাস বাটন (Placeholder)
-    // নতুন চ্যাটিং স্ক্রিন (ট্যাব ৩)
+    const SizedBox.shrink(),        // ট্যাব ২: মাঝের প্লাস বাটন
+    // চ্যাট স্ক্রিন (ট্যাব ৩)
     Scaffold(
       appBar: AppBar(
         title: const Text('💬 FZ Chats & Messages'),
@@ -139,7 +139,6 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // যেহেতু মাঝখানে প্লাস বাটন রয়েছে, তাই ইডেক্স হ্যান্ডেল করা হয়েছে
     int navIndex = _currentIndex > 2 ? _currentIndex - 1 : _currentIndex;
 
     return Scaffold(
@@ -169,7 +168,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
             icon: Icon(Icons.video_library_outlined),
             label: '',
           ),
-          // মাঝের প্লাস বাটন
+          // মাঝের প্লাস বাটন (কনস্ট্যান্ট ত্রুটি দূর করা হয়েছে)
           BottomNavigationBarItem(
             icon: Container(
               padding: const EdgeInsets.all(8),
@@ -177,11 +176,11 @@ class _MainAppScreenState extends State<MainAppScreen> {
                 color: Color(0xFF1E1B4B),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.add, color: whiteColorOrFallback(), size: 24),
+              child: const Icon(Icons.add, color: Colors.white, size: 24),
             ),
             label: '',
           ),
-          // নতুন যোগ করা চ্যাট আইকন ট্যাব
+          // চ্যাট আইকন ট্যাব
           const BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble_outline),
             label: '',
@@ -198,6 +197,4 @@ class _MainAppScreenState extends State<MainAppScreen> {
       ),
     );
   }
-
-  static const Color whiteColorOrFallback() => Colors.white;
 }
