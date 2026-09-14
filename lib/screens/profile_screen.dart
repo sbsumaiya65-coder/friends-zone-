@@ -8,7 +8,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // সোশ্যাল ক্যাটাগরি ফিল্টার ট্যাব স্টেট
   String _selectedTab = 'Posts';
 
   @override
@@ -18,9 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
-          // ==========================================
-          // ধাপ ১: কভার ফটো এবং টপ অ্যাপ বার আইকনসমূহ
-          // ==========================================
+          // কভার ফটো ও টপ বার
           Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.bottomCenter,
@@ -47,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: IconButton(
                             icon: const Icon(Icons.menu, color: Colors.white),
                             onPressed: () {
-                              _showActionMessage(context, 'Menu tapped');
+                              _showProfileMenuBottomSheet(context); // মেনু পপ-আপ কল হবে
                             },
                           ),
                         ),
@@ -55,9 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           backgroundColor: Colors.black.withOpacity(0.3),
                           child: IconButton(
                             icon: const Icon(Icons.settings, color: Colors.white),
-                            onPressed: () {
-                              _showActionMessage(context, 'Settings tapped');
-                            },
+                            onPressed: () {},
                           ),
                         ),
                       ],
@@ -77,15 +72,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   icon: const Icon(Icons.camera_alt, size: 16, color: Colors.pink),
                   label: const Text('Edit Cover', style: TextStyle(fontSize: 12)),
-                  onPressed: () {
-                    _showActionMessage(context, 'Edit Cover clicked');
-                  },
+                  onPressed: () {},
                 ),
               ),
-
-              // ==========================================
-              // ধাপ ২: প্রোফাইল পিকচার, ইউজারনেম, স্ট্যাটিস্টিক্স ও বায়ো
-              // ==========================================
               Positioned(
                 bottom: -45,
                 left: 16,
@@ -153,9 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // ==========================================
-                // ধাপ ৩: প্রধান অ্যাকশন বাটনসমূহ (Edit Profile ইত্যাদি)
-                // ==========================================
+                // ফিক্সড অ্যাকশন বাটন (টেক্সট ভাঙবে না)
                 Row(
                   children: [
                     Expanded(
@@ -165,40 +152,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           backgroundColor: Colors.pink,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                         ),
-                        onPressed: () {
-                          _showActionMessage(context, 'Edit Profile clicked');
-                        },
-                        child: const Text('Edit Profile', style: TextStyle(fontWeight: FontWeight.bold)),
+                        onPressed: () {},
+                        child: const Text('Edit Profile', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Expanded(
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           side: BorderSide(color: Colors.grey.shade300),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
                         ),
-                        onPressed: () {
-                          _showActionMessage(context, 'Post clicked');
-                        },
-                        child: const Text('Post', style: TextStyle(color: Colors.black87)),
+                        onPressed: () {},
+                        child: const Text('Post', style: TextStyle(color: Colors.black87, fontSize: 13)),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Expanded(
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           side: BorderSide(color: Colors.grey.shade300),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
                         ),
-                        onPressed: () {
-                          _showActionMessage(context, 'Promote clicked');
-                        },
-                        child: const Text('Promote', style: TextStyle(color: Colors.black87)),
+                        onPressed: () {},
+                        child: const Text('Promote', style: TextStyle(color: Colors.black87, fontSize: 12)),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     IconButton(
                       style: IconButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -206,61 +190,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           side: BorderSide(color: Colors.grey.shade300),
                         ),
                       ),
-                      icon: const Icon(Icons.more_horiz, color: Colors.black87),
+                      icon: const Icon(Icons.more_horiz, color: Colors.black87, size: 20),
                       onPressed: () {
-                        _showActionMessage(context, 'More options clicked');
+                        _showProfileMenuBottomSheet(context);
                       },
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
 
-                // ==========================================
-                // ধাপ ৪: সোশ্যাল এনগেজমেন্ট ব্যানার (Share Your Stories)
-                // ==========================================
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.pink.shade200, width: 1.5),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.pink.shade50,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.auto_awesome, color: Colors.pink),
-                      ),
-                      const SizedBox(width: 12),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Share Your Daily Stories',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              'Go live, upload reels & connect with friends instantly',
-                              style: TextStyle(fontSize: 12, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.pink),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // ==========================================
-                // ধাপ ৫: সোশ্যাল ফিল্টার ট্যাবসমূহ (Posts, Reels ইত্যাদি)
-                // ==========================================
+                // ফিল্টার ট্যাবসমূহ
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -273,43 +212,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-
-                // ==========================================
-                // ধাপ ৬: ব্যক্তিগত বিবরণ (Personal Details) ও এডিট অপশন
-                // ==========================================
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade200),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Personal details',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.edit, size: 18, color: Colors.grey),
-                            onPressed: () {
-                              _showActionMessage(context, 'Edit Personal Details clicked');
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      _buildDetailRow(Icons.location_on_outlined, 'Rajshahi Division, Bangladesh'),
-                      const SizedBox(height: 8),
-                      _buildDetailRow(Icons.favorite_outline, 'Active in Friends Zone Community'),
-                    ],
-                  ),
-                ),
                 const SizedBox(height: 30),
               ],
             ),
@@ -319,7 +221,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // হেল্পার উইজেট: স্ট্যাটাস কাউন্ট আইটেম
+  // প্রথম স্ক্রিনশটের মতো মেনু বটম শীট (Edit Profile, Share Profile ইত্যাদি)
+  void _showProfileMenuBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 30),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              _buildMenuItem(Icons.person_outline, 'Edit Profile', () {}),
+              _buildMenuItem(Icons.share_outlined, 'Share Profile', () {}),
+              _buildMenuItem(Icons.help_outline, 'Help & Support', () {}),
+              _buildMenuItem(Icons.campaign_outlined, 'Ad Manager', () {}),
+              _buildMenuItem(Icons.switch_account_outlined, 'Switch Profile', () {}),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.pink.shade50,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: Colors.pink, size: 20),
+      ),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+      onTap: onTap,
+    );
+  }
+
   Widget _buildStatItem(String count, String label) {
     return Row(
       children: [
@@ -330,7 +286,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // হেল্পার উইজেট: ফিল্টার ট্যাব আইটেম
   Widget _buildFilterTab(String title, IconData icon) {
     bool isSelected = _selectedTab == title;
     return Padding(
@@ -355,24 +310,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         },
       ),
-    );
-  }
-
-  // হেল্পার উইজেট: পার্সোনাল ডিটেইলস রো
-  Widget _buildDetailRow(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(icon, size: 18, color: Colors.grey.shade700),
-        const SizedBox(width: 10),
-        Text(text, style: const TextStyle(fontSize: 13, color: Colors.black87)),
-      ],
-    );
-  }
-
-  // স্নাকবার মেসেজ দেখানোর ফাংশন
-  void _showActionMessage(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), duration: const Duration(seconds: 1)),
     );
   }
 }
