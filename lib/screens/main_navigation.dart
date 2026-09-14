@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'reels_screen.dart';
-import 'chat_list_screen.dart';
-import 'fz_premium_screen.dart';
+import 'chats_screen.dart'; // আপনার প্রজেক্টের আসল চ্যাট ফাইলের নাম অনুযায়ী (chats_screen.dart)
+import 'premium_hub_screen.dart'; // আপনার প্রজেক্টের প্রিমিয়াম স্ক্রিনের নাম অনুযায়ী
 import 'profile_screen.dart';
 
-class HomeMainScreen extends StatefulWidget {
-  const HomeMainScreen({Key? key}) : super(key: key);
+class MainAppScreen extends StatefulWidget {
+  const MainAppScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeMainScreen> createState() => _HomeMainScreenState();
+  State<MainAppScreen> createState() => _MainAppScreenState();
 }
 
-class _HomeMainScreenState extends State<HomeMainScreen> {
+class _MainAppScreenState extends State<MainAppScreen> {
   int _currentIndex = 0;
 
-  // সব মূল স্ক্রিনগুলোর লিস্ট
   final List<Widget> _screens = [
-    const HomeScreen(),       // Index 0: Home / Feed
-    const ReelsScreen(),      // Index 1: Reels / Feels
-    const ChatListScreen(),   // Index 2: Chat & Messages
-    const FZPremiumScreen(),  // Index 3: FZ Unique Features
-    const ProfileScreen(),    // Index 4: User Profile
+    const HomeScreen(),       
+    const ReelsScreen(),      
+    const ChatListScreen(),   
+    const PremiumHubScreen(),  
+    const ProfileScreen(),    
   ];
 
-  // প্লাс (+) বাটনে ক্লিক করলে যে বটম শিট বা পপআপ আসবে
   void _showAddOptionsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -54,29 +52,17 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
               ListTile(
                 leading: const Icon(Icons.post_add, color: Colors.pink, size: 28),
                 title: const Text('Create Post'),
-                subtitle: const Text('Share photos, thoughts and updates'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // TODO: Navigate to Create Post Screen
-                },
+                onTap: () => Navigator.pop(context),
               ),
               ListTile(
                 leading: const Icon(Icons.video_collection, color: Colors.purple, size: 28),
                 title: const Text('Upload Reel / Feel'),
-                subtitle: const Text('Share short videos with friends'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // TODO: Navigate to Reel Upload Screen
-                },
+                onTap: () => Navigator.pop(context),
               ),
               ListTile(
                 leading: const Icon(Icons.live_tv, color: Colors.red, size: 28),
                 title: const Text('Go Live'),
-                subtitle: const Text('Start a live stream or voice room'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // TODO: Navigate to Live Room Screen
-                },
+                onTap: () => Navigator.pop(context),
               ),
             ],
           ),
@@ -90,12 +76,11 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex > 2 ? _currentIndex - 1 : _currentIndex, // adjusting index for middle plus button
+        currentIndex: _currentIndex > 2 ? _currentIndex - 1 : _currentIndex,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.pink,
         unselectedItemColor: Colors.grey,
         onTap: (index) {
-          // লজিক: যদি মাঝখানের প্লাস আইকনে ক্লিক করা হয়
           if (index == 2) {
             _showAddOptionsModal(context);
           } else if (index > 2) {
@@ -111,7 +96,6 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
         items: [
           const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           const BottomNavigationBarItem(icon: Icon(Icons.video_library), label: 'Reels'),
-          // মাঝখানের কাস্টম প্লাস বাটন
           BottomNavigationBarItem(
             icon: Container(
               padding: const EdgeInsets.all(8),
