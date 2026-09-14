@@ -1,6 +1,6 @@
 name: friends_zone
-description: "A new Flutter project."
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+description: "A gamified social media and live-streaming application."
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -11,27 +11,16 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  audioplayers: ^6.0.0 # প্রিমিয়াম পারচেজ, লাইক ও ভিআইপি এন্ট্রি সাউন্ড বাজানোর জন্য
+  audioplayers: ^6.0.0
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter_test
+    sdk: flutter
   flutter_lints: ^2.0.0
-
-# কাস্টম অ্যাপ আইকন বা লোগো অটোমেটিক সেট করার জন্য এই প্যাকেজটি রাখা হলো
-  flutter_launcher_icons: ^0.13.1
-
-# আপনার লোগো ইমেজটি যদি assets ফোল্ডারে থাকে, তার কনফিগারেশন নিচে দেওয়া হলো
-flutter_launcher_icons:
-  android: "ic_launcher"
-  ios: true
-  image_path: "assets/logo.png" # আপনার লোগো ছবির পাথ এখানে দিতে হবে (যদি assets ফোল্ডারে থাকে)
-  min_sdk_android: 21
 
 flutter:
   uses-material-design: true
 
-  # আপনার যদি প্রজেক্টে কোনো ছবি, ফন্ট বা সাউন্ড এসেট থাকে, সেটির পাথ এখানে ডিক্লেয়ার করতে হবে
   assets:
     - assets/
     - assets/sounds/
