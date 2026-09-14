@@ -15,12 +15,13 @@ class MainAppScreen extends StatefulWidget {
 class _MainAppScreenState extends State<MainAppScreen> {
   int _currentIndex = 0;
 
+  // স্ক্রিন লিস্ট (0: Home, 1: Reels, 2: Chats, 3: FZ Pro, 4: Profile)
   final List<Widget> _screens = [
-    const HomeScreen(),       
-    const ReelsScreen(),      
-    const ChatsScreen(),      
-    const PremiumHubScreen(), 
-    const ProfileScreen(),    
+    const HomeScreen(),       // Index 0
+    const ReelsScreen(),      // Index 1
+    const ChatsScreen(),      // Index 2 (Chats)
+    const PremiumHubScreen(), // Index 3 (FZ Pro)
+    const ProfileScreen(),    // Index 4 (Profile if needed)
   ];
 
   void _showAddOptionsModal(BuildContext context) {
@@ -53,24 +54,17 @@ class _MainAppScreenState extends State<MainAppScreen> {
               ListTile(
                 leading: const Icon(Icons.post_add, color: Colors.pink, size: 28),
                 title: const Text('Create Post', style: TextStyle(color: Colors.white)),
-                onTap: () {
-                  Navigator.pop(context);
-                  // এখানে পোস্ট ক্রিয়েটের নেভিগেশন বা লজিক যোগ করতে পারেন
-                },
+                onTap: () => Navigator.pop(context),
               ),
               ListTile(
                 leading: const Icon(Icons.video_collection, color: Colors.purple, size: 28),
                 title: const Text('Upload Reel / Feel', style: TextStyle(color: Colors.white)),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+                onTap: () => Navigator.pop(context),
               ),
               ListTile(
                 leading: const Icon(Icons.live_tv, color: Colors.red, size: 28),
                 title: const Text('Go Live', style: TextStyle(color: Colors.white)),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+                onTap: () => Navigator.pop(context),
               ),
             ],
           ),
@@ -79,24 +73,39 @@ class _MainAppScreenState extends State<MainAppScreen> {
     );
   }
 
+  // বটম বারের আইটেম ইনডেক্স সঠিক করার লজিক
+  int _getBottomNavIndex() {
+    if (_currentIndex == 2) return 3; // Chats
+    if (_currentIndex == 3) return 4; // FZ Pro
+    return _currentIndex;            // Home & Reels
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex > 2 ? _currentIndex - 1 : _currentIndex,
+        currentIndex: _getBottomNavIndex(),
         type: BottomNavigationBarType.fixed,
         backgroundColor: const Color(0xFF0F0B15),
         selectedItemColor: Colors.pinkAccent,
         unselectedItemColor: Colors.grey,
         onTap: (index) {
           if (index == 2) {
+            // প্লাস (+) বাটন ক্লিক করলে মডাল আসবে
             _showAddOptionsModal(context);
-          } else if (index > 2) {
+          } else if (index == 3) {
+            // Chats ট্যাব (Screen Index 2)
             setState(() {
-              _currentIndex = index + 1;
+              _currentIndex = 2;
+            });
+          } else if (index == 4) {
+            // FZ Pro ট্যাব (Screen Index 3)
+            setState(() {
+              _currentIndex = 3;
             });
           } else {
+            // Home (0) অথবা Reels (1)
             setState(() {
               _currentIndex = index;
             });
