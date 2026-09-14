@@ -1,92 +1,174 @@
-import 'package:flutter/material.dart';
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Friends Zone Home'),
-        backgroundColor: Colors.pink,
-        foregroundColor: Colors.white,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+// এই ফাংশনটি আপনার প্লাস (+) বাটনের onPressed-এ কল করতে হবে
+void _showCreateBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) {
+      return Container(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 30),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
+          ),
+        ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.pink.shade50,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.pink.shade200),
+            // বটম শীটের ওপরের ছোট বার (Drag handle)
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome to Friends Zone!',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.pink),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Explore nearby radar users, share posts, earn coins, and play games offline or online.',
-                    style: TextStyle(color: Colors.black87),
-                  ),
-                ],
+            ),
+            
+            // "Create" টাইটেল
+            const Text(
+              'Create',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
             ),
             const SizedBox(height: 20),
-            const Text('Quick Shortcuts:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                children: [
-                  _buildShortcutCard(context, 'Tic Tac Toe Game', Icons.games, () {
-                    Navigator.pushNamed(context, '/tictactoe');
-                  }),
-                  _buildShortcutCard(context, 'Live Rooms', Icons.mic, () {
-                    // Navigate to Room or Tab
-                  }),
-                  _buildShortcutCard(context, 'Nearby Radar', Icons.radar, () {
-                    // Navigate to Discover
-                  }),
-                  _buildShortcutCard(context, 'Premium Store', Icons.store, () {
-                    // Navigate to Profile
-                  }),
-                ],
-              ),
+
+            // অপশনগুলোর গ্রিড বা রো লেআউট
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildCreateItem(context, Icons.grid_view_rounded, 'Post', () {
+                  Navigator.pop(context);
+                  // TODO: Post পেজে যাওয়ার কোড
+                }),
+                _buildCreateItem(context, Icons.add_circle, 'Zone Story', () {
+                  Navigator.pop(context);
+                  // TODO: Story পেজে যাওয়ার কোড
+                }),
+                _buildCreateItem(context, Icons.video_collection, 'Feels', () {
+                  Navigator.pop(context);
+                  // TODO: Feels/Reels পেজে যাওয়ার কোড
+                }),
+                _buildCreateItem(context, Icons.touch_app, 'Flick', () {
+                  Navigator.pop(context);
+                  // TODO: Flick পেজে যাওয়ার কোড
+                }),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Row(
+                    children: [
+                      _buildCreateItem(context, Icons.live_tv, 'Go Live', () {
+                        Navigator.pop(context);
+                        // TODO: Live পেজে যাওয়ার কোড
+                      }),
+                      const SizedBox(width: 32),
+                      _buildCreateItemWithBadge(context, Icons.mic, 'Audio Soon', true, () {
+                        Navigator.pop(context);
+                      }),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-      ),
-    );
-  }
+      );
+    },
+  );
+}
 
-  Widget _buildShortcutCard(BuildContext context, String title, IconData icon, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
-          border: Border.all(color: Colors.grey.shade200),
+// গোল আইকন এবং লেআউট তৈরি করার হেল্পার উইজেট
+Widget _buildCreateItem(BuildContext context, IconData icon, String label, VoidCallback onTap) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Column(
+      children: [
+        Container(
+          height: 65,
+          width: 65,
+          decoration: BoxDecoration(
+            color: Colors.pink.shade50,
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.pink.shade100, width: 1),
+          ),
+          child: Icon(icon, color: Colors.pink, size: 28),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+// "Audio Soon" ব্যাজসহ আইকন তৈরি করার হেল্পার উইজেট
+Widget _buildCreateItemWithBadge(BuildContext context, IconData icon, String label, bool isSoon, VoidCallback onTap) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Column(
+      children: [
+        Stack(
+          clipBehavior: Clip.none,
           children: [
-            Icon(icon, size: 40, color: Colors.pink),
-            const SizedBox(height: 10),
-            Text(title, style: const TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+            Container(
+              height: 65,
+              width: 65,
+              decoration: BoxDecoration(
+                color: Colors.pink.shade50,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.pink.shade100, width: 1),
+              ),
+              child: Icon(icon, color: Colors.pink, size: 28),
+            ),
+            if (isSoon)
+              Positioned(
+                bottom: -4,
+                right: -8,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.pink,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Text(
+                    'SOON',
+                    style: TextStyle(fontSize: 9, color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
           ],
         ),
-      ),
-    );
-  }
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    ),
+  );
 }
