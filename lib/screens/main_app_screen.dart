@@ -26,6 +26,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
   void _showAddOptionsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      backgroundColor: const Color(0xFF1E1629),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -39,30 +40,37 @@ class _MainAppScreenState extends State<MainAppScreen> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: Colors.grey[600],
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
               const SizedBox(height: 20),
               const Text(
                 'Create & Share',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               ListTile(
                 leading: const Icon(Icons.post_add, color: Colors.pink, size: 28),
-                title: const Text('Create Post'),
-                onTap: () => Navigator.pop(context),
+                title: const Text('Create Post', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                  // এখানে পোস্ট ক্রিয়েটের নেভিগেশন বা লজিক যোগ করতে পারেন
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.video_collection, color: Colors.purple, size: 28),
-                title: const Text('Upload Reel / Feel'),
-                onTap: () => Navigator.pop(context),
+                title: const Text('Upload Reel / Feel', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.live_tv, color: Colors.red, size: 28),
-                title: const Text('Go Live'),
-                onTap: () => Navigator.pop(context),
+                title: const Text('Go Live', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               ),
             ],
           ),
@@ -78,7 +86,8 @@ class _MainAppScreenState extends State<MainAppScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex > 2 ? _currentIndex - 1 : _currentIndex,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.pink,
+        backgroundColor: const Color(0xFF0F0B15),
+        selectedItemColor: Colors.pinkAccent,
         unselectedItemColor: Colors.grey,
         onTap: (index) {
           if (index == 2) {
@@ -100,10 +109,10 @@ class _MainAppScreenState extends State<MainAppScreen> {
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: const BoxDecoration(
-                color: Color(0xFF1E1E30),
+                color: Colors.pink,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.add, color: Colors.white, size: 24),
+              child: const Icon(Icons.add, color: Colors.white, size: 22),
             ),
             label: '',
           ),
