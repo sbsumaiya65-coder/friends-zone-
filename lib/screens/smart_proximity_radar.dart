@@ -11,10 +11,10 @@ class SmartProximityRadarScreen extends StatelessWidget {
         backgroundColor: Colors.pink,
         foregroundColor: Colors.white,
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.radar, size: 80, color: Colors.pink),
             SizedBox(height: 16),
             Text(
@@ -27,4 +27,3 @@ class SmartProximityRadarScreen extends StatelessWidget {
     );
   }
 }
-
