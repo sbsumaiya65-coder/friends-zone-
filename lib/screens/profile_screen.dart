@@ -17,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: const Text('👤 My FZ Profile & Wallet'),
         backgroundColor: Colors.pink,
         foregroundColor: Colors.white,
-      ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
