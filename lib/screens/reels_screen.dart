@@ -6,34 +6,28 @@ class ReelsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // মোট ৩টি ট্যাব: Nearby, Following, Trending
+      length: 3, // Nearby, Following, Trending
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Stack(
           children: [
-            // ==========================================
-            // ১. ব্যাকগ্রাউন্ড ভিডিও / রিলস কন্টেন্ট (Full Screen)
-            // ==========================================
+            // ভিডিও ফিড পেজ ভিউ
             PageView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: 5, // উদাহরণস্বরূপ ৫টি ভিডিও
+              itemCount: 3,
               itemBuilder: (context, index) {
                 return Stack(
                   fit: StackFit.expand,
                   children: [
-                    // ভিডিওর পরিবর্তে প্লেসহোল্ডার ব্যাকগ্রাউন্ড (এখানে আপনার VideoPlayer বসবে)
+                    // ভিডিও ব্যাকগ্রাউন্ড প্লেসহোল্ডার
                     Container(
                       color: Colors.grey.shade900,
                       child: const Center(
-                        child: Icon(
-                          Icons.play_circle_fill,
-                          color: Colors.white54,
-                          size: 80,
-                        ),
+                        child: Icon(Icons.play_circle_fill, color: Colors.white54, size: 80),
                       ),
                     ),
 
-                    // নিচের গ্রেডিয়েন্ট শ্যাডো (টেক্সট স্পষ্ট দেখার জন্য)
+                    // গ্রেডিয়েন্ট ওভারলে
                     Positioned(
                       bottom: 0,
                       left: 0,
@@ -44,92 +38,80 @@ class ReelsScreen extends StatelessWidget {
                           gradient: LinearGradient(
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
-                            colors: [
-                              Colors.black.withOpacity(0.8),
-                              Colors.transparent,
-                            ],
+                            colors: [Colors.black.withOpacity(0.8), Colors.transparent],
                           ),
                         ),
                       ),
                     ),
 
-                    // ==========================================
-                    // ২. ডান পাশের ইন্টারঅ্যাক্টিভ বাটনগুলো (Like, Comment, Share, Profile)
-                    // ==========================================
+                    // ডান পাশের অ্যাকশন বাটন (প্রোফাইল, লাইক, কমেন্ট, শেয়ার)
                     Positioned(
                       right: 12,
                       bottom: 80,
                       child: Column(
                         children: [
-                          // ক. প্রোফাইল বা প্লাস বাটন (ক্লিক করলে প্রোফাইলে যাবে)
+                          // প্রোফাইল বাটন ও প্লাস আইকন
                           GestureDetector(
-                            onTap: () {
-                              // TODO: ইউজারের প্রোফাইলে যাওয়ার নেভিগেশন
-                            },
+                            onTap: () {},
                             child: Stack(
                               clipBehavior: Clip.none,
                               children: [
                                 const CircleAvatar(
                                   radius: 22,
                                   backgroundColor: Colors.white,
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundImage: NetworkImage('https://via.placeholder.com/150'), // ইউজারের ছবি
-                                  ),
+                                  child: Icon(Icons.person, color: Colors.pink, size: 24),
                                 ),
                                 Positioned(
-                                  bottom: -4,
-                                  right: 12,
+                                  bottom: -2,
+                                  right: 10,
                                   child: Container(
-                                    height: 18,
-                                    width: 18,
+                                    height: 16,
+                                    width: 16,
                                     decoration: const BoxDecoration(
                                       color: Colors.pink,
                                       shape: BoxShape.circle,
                                     ),
-                                    child: const Icon(Icons.add, color: Colors.white, size: 12),
+                                    child: const Icon(Icons.add, color: Colors.white, size: 10),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 22),
 
-                          // খ. লাইক বাটন
+                          // লাইক বাটন
                           const Column(
                             children: [
-                              Icon(Icons.favorite, color: Colors.white, size: 35),
+                              Icon(Icons.favorite, color: Colors.white, size: 32),
                               SizedBox(height: 4),
                               Text('131', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 18),
 
-                          // গ. কমেন্ট বাটন
+                          // কমেন্ট বাটন
                           const Column(
                             children: [
-                              Icon(Icons.comment, color: Colors.white, size: 32),
+                              Icon(Icons.comment, color: Colors.white, size: 30),
                               SizedBox(height: 4),
                               Text('72', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 18),
 
-                          // ঘ. শেয়ার বাটন
+                          // শেয়ার বাটন
                           const Column(
                             children: [
-                              Icon(Icons.share, color: Colors.white, size: 32),
+                              Icon(Icons.share, color: Colors.white, size: 30),
                               SizedBox(height: 4),
-                              Text('Share', style: TextStyle(color: Colors.white, fontSize: 12)),
+                              Text('Share', style: TextStyle(color: Colors.white, fontSize: 11)),
                             ],
                           ),
                         ],
                       ),
                     ),
 
-                    // ==========================================
-                    // ৩. নিচের দিকে ইউজারের নাম, ফলো বাটন ও ক্যাপশন
-                    // ==========================================
+                    // নিচের দিকে ইউজার ইনফো ও ক্যাপশন
                     Positioned(
                       left: 16,
                       bottom: 70,
@@ -137,38 +119,29 @@ class ReelsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // ইউজারের নাম ও Follow বাটন
                           Row(
                             children: [
                               const Text(
                                 'জীবন মানেই যন্ত্রনা',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(width: 10),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.white, width: 1),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: const Text(
-                                    'Follow',
-                                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
-                                  ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white, width: 1),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Text(
+                                  'Follow',
+                                  style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 8),
-                          // ভিডিওর ক্যাপশন বা টেক্সট
+                          const SizedBox(height: 6),
                           const Text(
-                            'এই রকমের ভাগ্য কয়জনের আছে বল কার সাথে খাবার খাইতেছি দেখোছো আরে একে কমেন্ট বক্সে বলে দাও',
+                            'এই রকমের ভাগ্য কয়জনের আছে বল কার সাথে খাবার খাইতেছি দেখোছো...',
                             style: TextStyle(color: Colors.white70, fontSize: 13),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -181,15 +154,13 @@ class ReelsScreen extends StatelessWidget {
               },
             ),
 
-            // ==========================================
-            // ৪. ওপরের টপ বার (Back Button & Nearby, Following, Trending Tabs)
-            // ==========================================
+            // ওপরের টপ বার (Nearby, Following, Trending ট্যাবসমূহ)
             Positioned(
               top: 40,
               left: 0,
               right: 0,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Row(
                   children: [
                     IconButton(
@@ -198,11 +169,11 @@ class ReelsScreen extends StatelessWidget {
                     ),
                     const Expanded(
                       child: TabBar(
-                        indicatorColor: Colors.white,
+                        indicatorColor: Colors.pink,
                         indicatorWeight: 3,
                         labelColor: Colors.white,
                         unselectedLabelColor: Colors.white60,
-                        labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                         tabs: [
                           Tab(text: 'Nearby'),
                           Tab(text: 'Following'),
