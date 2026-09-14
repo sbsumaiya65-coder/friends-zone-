@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'reels_screen.dart';
-import 'chats_screen.dart'; // আপনার প্রজেক্টের আসল চ্যাট ফাইলের নাম অনুযায়ী (chats_screen.dart)
-import 'premium_hub_screen.dart'; // আপনার প্রজেক্টের প্রিমিয়াম স্ক্রিনের নাম অনুযায়ী
+import 'chats_screen.dart';       // আপনার ফোল্ডারের আসল চ্যাট ফাইল
+import 'premium_hub_screen.dart'; // আপনার ফোল্ডারের আসল প্রিমিয়াম ফাইল
 import 'profile_screen.dart';
 
-class MainAppScreen extends StatefulWidget {
-  const MainAppScreen({Key? key}) : super(key: key);
+class MainNavigation extends StatefulWidget {
+  const MainNavigation({Key? key}) : super(key: key);
 
   @override
-  State<MainAppScreen> createState() => _MainAppScreenState();
+  State<MainNavigation> createState() => _MainNavigationState();
 }
 
-class _MainAppScreenState extends State<MainAppScreen> {
+class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
+  // সব মূল স্ক্রিনগুলোর সঠিক লিস্ট (আপনার আসল ক্লাস নেম অনুযায়ী)
   final List<Widget> _screens = [
-    const HomeScreen(),       
-    const ReelsScreen(),      
-    const ChatListScreen(),   
-    const PremiumHubScreen(),  
-    const ProfileScreen(),    
+    const HomeScreen(),       // Index 0: Home / Feed
+    const ReelsScreen(),      // Index 1: Reels / Feels
+    const ChatsScreen(),      // Index 2: Chat & Messages
+    const PremiumHubScreen(), // Index 3: FZ Unique Features
+    const ProfileScreen(),    // Index 4: User Profile
   ];
 
+  // প্লাস (+) বাটনে ক্লিক করলে যে পপআপ আসবে
   void _showAddOptionsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -52,17 +54,26 @@ class _MainAppScreenState extends State<MainAppScreen> {
               ListTile(
                 leading: const Icon(Icons.post_add, color: Colors.pink, size: 28),
                 title: const Text('Create Post'),
-                onTap: () => Navigator.pop(context),
+                subtitle: const Text('Share photos, thoughts and updates'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.video_collection, color: Colors.purple, size: 28),
                 title: const Text('Upload Reel / Feel'),
-                onTap: () => Navigator.pop(context),
+                subtitle: const Text('Share short videos with friends'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.live_tv, color: Colors.red, size: 28),
                 title: const Text('Go Live'),
-                onTap: () => Navigator.pop(context),
+                subtitle: const Text('Start a live stream or voice room'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               ),
             ],
           ),
@@ -81,6 +92,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         selectedItemColor: Colors.pink,
         unselectedItemColor: Colors.grey,
         onTap: (index) {
+          // লজিক: মাঝখানের প্লাস আইকনে ক্লিক করলে পপআপ আসবে, অন্যথায় ট্যাব পরিবর্তন হবে
           if (index == 2) {
             _showAddOptionsModal(context);
           } else if (index > 2) {
@@ -96,6 +108,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         items: [
           const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           const BottomNavigationBarItem(icon: Icon(Icons.video_library), label: 'Reels'),
+          // মাঝখানের কাস্টম প্লাস বাটন
           BottomNavigationBarItem(
             icon: Container(
               padding: const EdgeInsets.all(8),
