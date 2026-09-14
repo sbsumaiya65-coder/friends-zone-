@@ -1,70 +1,55 @@
 import 'package:flutter/material.dart';
 
-class FZPremiumScreen extends StatelessWidget {
-  const FZPremiumScreen({Key? key}) : super(key: key);
+class PremiumHubScreen extends StatelessWidget {
+  const PremiumHubScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink,
-        title: const Text('FZ Premium & Unique Modules', style: TextStyle(color: Colors.white, fontSize: 18)),
+        title: const Text('FZ Pro & Premium Hub'),
+        backgroundColor: const Color(0xFF1E1E30),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [Colors.pink, Colors.purple]),
-              borderRadius: BorderRadius.circular(12),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.pink[50],
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.pink, width: 1.5),
+              ),
+              child: Column(
+                children: const [
+                  Icon(Icons.star, size: 50, color: Colors.pink),
+                  SizedBox(height: 10),
+                  Text(
+                    'Upgrade to FZ Pro',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.pink),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    'Unlock exclusive features, badges, and VIP privileges!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
             ),
-            child: const Text(
-              'Unlock Ultimate Features with FZ Coins 👑\nSpend your earned FZ coins to permanently unlock pro tools!',
-              style: TextStyle(color: Colors.white, fontSize: 14, height: 1.4),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF1E1E30),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
+              onPressed: () {},
+              child: const Text('Subscribe Now', style: TextStyle(fontSize: 16, color: Colors.white)),
             ),
-          ),
-          const SizedBox(height: 20),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            children: [
-              _buildModuleCard('AI Social Twin', '1000 FZ', Icons.smart_toy),
-              _buildModuleCard('Mesh Bluetooth', '750 FZ', Icons.bluetooth),
-              _buildModuleCard('Time Capsules', '600 FZ', Icons.location_on),
-              _buildModuleCard('PK Battle Arena', '400 FZ', Icons.local_fire_department),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildModuleCard(String title, String price, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.pink, size: 30),
-          const SizedBox(height: 10),
-          Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-          const SizedBox(height: 5),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(color: Colors.amber[700], borderRadius: BorderRadius.circular(6)),
-            child: Text(price, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
