@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
 
-class ChatListScreen extends StatelessWidget {
-  const ChatListScreen({Key? key}) : super(key: key);
+class ChatsScreen extends StatelessWidget {
+  const ChatsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink,
-        title: const Text('FZ Chats & Messages', style: TextStyle(color: Colors.white)),
+        title: const Text('Chats & Messages'),
+        backgroundColor: const Color(0xFF1E1E30),
       ),
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) {
           return ListTile(
-            leading: const CircleAvatar(
-              backgroundColor: Colors.pinkAccent,
-              child: Icon(Icons.person, color: Colors.white),
+            leading: CircleAvatar(
+              backgroundColor: Colors.pink[200],
+              child: const Icon(Icons.person, color: Colors.white),
             ),
-            title: Text('Friend ${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: const Text('Hey! Check out my new post...'),
-            trailing: const Text('10:45 AM', style: TextStyle(color: Colors.grey, fontSize: 12)),
-            onTap: () {
-              // TODO: Open Chat Room Screen
-            },
+            title: Text('Friend Name $index'),
+            subtitle: const Text('Hello! How are you doing?'),
+            trailing: const Text('12:30 PM', style: TextStyle(fontSize: 12, color: Colors.grey)),
+            onTap: () {},
           );
         },
       ),
